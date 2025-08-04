@@ -1,0 +1,29 @@
+!title
+!image https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlkUoMPzDmaQUdytAObZcLEO2r5yWqqrrCsA&s
+*Slides*
+Demo
+
+Example Header
+
+Bullets
+- Hello
+- World
+
+Text
+Hello
+World
+
+!image https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTza-DHmeEgi6VhODM9ANNdPmd4iMsaUdw_tQ&amp;s
+Image
+
+Formatting
+- *Bold*
+- Date Time: <<%X %x>>
+
+Goodbye
+For more, see example.slides
+
+!global
+!time 3
+!pfoot Primary Footer
+!sfoot Secondary Footer

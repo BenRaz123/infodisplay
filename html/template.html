@@ -1,0 +1,275 @@
+<!doctype html>
+<html>
+<body>
+{{ getScript }}
+{{ getStyles }}
+<script>
+const regex = /(?<!%)%(([a-z])|([A-Z]))/g;
+function strftime(time, fmt) {
+    const table = {
+        "%a": () => shortDay(time.getDay()),
+        "%A": () => longDay(time.getDay()),
+        
+        "%b": () => shortMonth(time.getMonth()),
+        "%B": () => longMonth(time.getMonth()),
+        
+        "%C": () => Math.floor(time.getFullYear() / 100),
+        "%d": () => leftPad(time.getDate(), 2),
+        "%e": () => leftPad(time.getDate(), 2, " "),
+
+        "%D": () => strftime(time, `%m/%d/%y`),
+        "%F": () => strftime(time, `%Y-%m-%d`),
+        "%h": () => strftime(time, `%b`),
+
+        "%H": () => leftPad(time.getHours(), 2),
+        "%I": () => leftPad(time.getHours() % 12 === 0 ? 12 : time.getHours() % 12, 2),
+        "%j": () => leftPad(getDayOfYear(time), 3),
+        
+        "%k": () => leftPad(time.getHours(), 2, " "),
+        "%l": () => leftPad(time.getHours() % 12 === 0 ? 12 : time.getHours() % 12, 2, " "),
+        "%m": () => leftPad(time.getMonth()+1, 2),
+        "%M": () => leftPad(time.getMinutes(), 2),
+        "%n": () => "\\n",
+        "%p": () => time.getHours()<12 ? "AM" : "PM",
+        "%P": () => time.getHours()<12 ? "am" : "pm",
+        "%r": () => strftime(time, `%I:%M:%S %p`),
+        "%R": () => strftime(time, `%H:%M`),
+        "%s": () => Math.floor(time.getTime() / 1000),
+        "%S": () => leftPad(time.getSeconds(), 2),
+        "%t": () => "\\t",
+        "%T": () => strftime(time, `%H:%M:%S`),
+        "%u": () => time.getDay() === 0 ? 7 : time.getDay(),
+        "%U": () => leftPad(getWeekNumber(time), 2),
+        "%w": () => time.getDay(),
+        "%x": () => strftime(time, `%m/%d/%y`),
+        "%X": () => strftime(time, `%H:%M:%S`),
+        "%y": () => leftPad(time.getFullYear() % 100, 2),
+        "%Y": () => time.getFullYear(),
+    }
+    
+    fmt = fmt.replace(regex, match => table[match]() ?? "!err");
+    fmt = fmt.replaceAll(`%%`, `%`);
+
+    return fmt;
+}
+
+function getWeekNumber(date) {
+  var d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  var dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+  return Math.ceil((((d - yearStart) / 86400000) + 1)/7)
+}
+
+function getDayOfYear(date) {
+  const start = new Date(date.getFullYear(), 0, 1);
+  const diff = date - start;
+  const oneDay = 1000 * 60 * 60 * 24;
+  return Math.floor(diff / oneDay) + 1;
+}
+
+function leftPad(str, num, ch="0") {
+    str = String(str);
+    if (num <= str.length) return str;
+    return ch.repeat(num-str.length) + str;
+}
+
+function longMonth(monthIndex) {
+    return [
+        "January", "February", "March",
+        "April",   "May",      "June",
+        "July",    "August",   "September",
+        "October", "November", "December"
+    ][monthIndex];
+}
+
+function shortMonth(monthIndex) {
+    return [
+        "Jan", "Feb", "Mar",
+        "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep",
+        "Oct", "Nov", "Dec"
+    ][monthIndex];
+}
+
+function longDay(day) {
+    return ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][day];
+}
+
+function shortDay(day) {
+    return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][day];
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+var slides;
+{{ if not .NoAutoPlay }}
+document.addEventListener("DOMContentLoaded", () => {
+    slides = document.querySelectorAll("slide");
+
+    (async () => { 
+        while (true) {
+			if (slides.length == 0) return;
+            for (const slide of slides) {
+				const time = slide.getAttribute('time') ?? {{ .CustomDuration.Or 10.0}};
+                slide.setAttribute("active", "");
+				await sleep(time * 1000);
+                slide.removeAttribute("active")
+            }
+			{{ if .Script.Has }}
+			if (typeof main === 'function') main();
+			else console.error("main function not found")
+			{{ end }}
+        }
+    })();
+});
+{{ end }}
+
+</script>
+{{ $pfoot := .PrimaryFooter }}
+{{ $sfoot := .SecondaryFooter }}
+{{ range .Slides }}
+<script>console.log({{ . }})</script>
+{{ if .IsTitleSlide }}
+	<slide class="title" {{ if .Id.Has }} id="{{.Id.Val}}" {{ end }} {{ if .CustomDuration.Has }} time="{{.CustomDuration.Val}}" {{ end }}>
+		<main>
+			{{ if .Image.Has }}
+			<img src={{.Image.Val}}>
+			{{ end }}
+			<h1>{{ range .HeaderLines}}{{ process . }}<br>{{ end }}</h1>
+		</main>
+	</slide>
+{{ else }}
+	<slide {{ if .Id.Has }} id="{{.Id.Val}}" {{ end }} {{ if .CustomDuration.Has }} data-time="{{.CustomDuration.Val}}" {{ end }}>
+		<main>
+			<div class="side">
+				{{ range .HeaderLines }}
+				<h1>{{ process . }}</h1>
+				{{ end }}
+				{{ if not (eq 0 (len .Bullets)) }}
+				<ul>
+					{{ range .Bullets }}
+					<li>{{ process . }}</li>
+					{{ end }}
+				</ul>
+				{{ else if not (eq 0 (len .Lines)) }}
+				{{ range .Lines }}
+				<p>{{ process . }}</p>
+				{{ end }}
+				{{ end }}
+			</div>
+			{{ if .Image.Has }} <img src={{.Image.Val}}> {{ end }}
+		</main>
+		{{ if $pfoot.Has }}
+		{{ if $sfoot.Has }}
+		<footer>					
+			<span class="pfoot">{{ process $pfoot.Val }}</span>	
+			<span class="sfoot">{{ process $sfoot.Val }}</span>	
+		</footer>
+		{{ end }}
+		{{ end }}
+	</slide>
+{{ end }}
+{{ end }}
+</body>
+<style>
+body, html, slide {
+	margin: 0;
+	width:100%;
+	height:100%;
+}
+
+slide {
+	display: none;
+}
+
+slide[active] {
+	display: block;
+}
+
+
+/*slide.title > main {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+}*/
+
+slide { margin: 0 }
+
+h1, p, li {
+	font-weight: 315;
+	font-size: 3.85em;
+}
+
+slide > main {
+	margin-top: 75px;
+	margin-left: 75px;
+	margin-right: 75px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between
+}
+
+img {
+	width: 100%;
+	height: auto;
+	max-width: 17%;
+	max-height: 100%;
+	align-self: flex-start;
+}
+
+slide:not(.title) h1 {
+	margin-top: 0;	
+	padding-bottom: 0.5em;
+}
+
+slide:not(.title) h1 {
+	border-bottom: solid 1px #0003
+}
+
+p, li {
+	color: #0009;
+}
+
+p {
+	margin-top: 0em;
+	margin-bottom: 0.1em;
+}
+
+footer {
+	position: fixed;
+	bottom: 75px;
+	right: 75px;
+}
+
+div.header {
+	display: flex;
+	flex-direction: row;
+	margin: 0
+}
+
+slide.title {
+	padding: 0;
+}
+
+slide.title main {
+	height: 100%;
+	display:flex;
+	flex-direction:column;
+	justify-content: space-between;
+	align-items: flex-start;
+	margin: 0;
+}
+
+slide.title h1, slide.title img {
+	padding: 75px;
+	margin: 0;
+}
+
+</style>
+</html>

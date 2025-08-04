@@ -1,0 +1,7 @@
+<span id="clock-{{ .Id }}">&lt;&lt;{{.TimeFmt}}&gt;&gt;</span>
+<script>
+	document.querySelector("#clock-{{.Id}}").textContent = strftime(new Date(), "{{.TimeFmt}}");
+	setInterval(() => {
+		document.querySelector("#clock-{{.Id}}").textContent = strftime(new Date(), "{{.TimeFmt}}");
+	}, 1000);
+</script>
