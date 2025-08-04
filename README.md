@@ -90,6 +90,9 @@ A slideshow can also have one or more global blocks which can have the following
 
     infodisplay -r
 
+to get a list of directives
+
 or 
     
     infodisplay -R <specific directive>
+
