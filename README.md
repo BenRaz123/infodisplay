@@ -4,6 +4,8 @@
 
 [![Go Report Card](https://goreportcard.com/badge/benraz123/infodisplay)](https://goreportcard.com/report/benraz123/infodisplay) 
 
+    go install github.com/benraz123/infodisplay@latest 
+
 ## What
 
 the purpose of infodisplay is to generate a looping slideshow that can easily incorporate dynamic data like the current time and other things with javascript that runs in the browser.
@@ -88,6 +90,10 @@ A slideshow can also have one or more global blocks which can have the following
 
 ## Getting Help
 
+    infodisplay --help
+
+to get help
+
     infodisplay -r
 
 to get a list of directives
@@ -95,4 +101,3 @@ to get a list of directives
 or 
     
     infodisplay -R <specific directive>
-
