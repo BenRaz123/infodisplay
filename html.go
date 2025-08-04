@@ -43,7 +43,7 @@ func process(s string) template.HTML {
 		}{Id: currentID, TimeFmt: template.JSStr(repl)}); err != nil {
 			log.Fatalf("failed to execute dt template: %s", err)
 		}
-		currentID+=1
+		currentID += 1
 		return buf.String()
 	})
 	return template.HTML(s)

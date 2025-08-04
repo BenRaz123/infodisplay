@@ -18,15 +18,15 @@ var CLI struct {
 }
 
 var help = map[string]string{
-	"!global": "(at beginning of a block) establish a block for global options",
-	"!pfoot":  "<string> (global) set a string to be the primary footer value. NOTE: for the footer to show, both !pfoot and !sfoot must be present",
-	"!sfoot":  "<string> (global) text to be set for the secondary footer",
-	"!exec":   "<file> (global) JS file to be executed every time the loop finishes. It's `main` method will be called.",
-	"!styles": "<file> (global) CSS file to be included in the slideshow",
-	"!title":  "(slide) sets the current slide blocks type to title-slide",
-	"!time":   "<float> (global OR slide) sets the duration for the entire slideshow or for the current slide, depending on the scope in which it is invoked",
-	"!image":  "<file> (slide) sets the image to show on the slide",
-	"!id":     "<string> (slide) sets the current id for the slide. By default each slide has no id. Useful for scripting.",
+	"!global":     "(at beginning of a block) establish a block for global options",
+	"!pfoot":      "<string> (global) set a string to be the primary footer value. NOTE: for the footer to show, both !pfoot and !sfoot must be present",
+	"!sfoot":      "<string> (global) text to be set for the secondary footer",
+	"!exec":       "<file> (global) JS file to be executed every time the loop finishes. It's `main` method will be called.",
+	"!styles":     "<file> (global) CSS file to be included in the slideshow",
+	"!title":      "(slide) sets the current slide blocks type to title-slide",
+	"!time":       "<float> (global OR slide) sets the duration for the entire slideshow or for the current slide, depending on the scope in which it is invoked",
+	"!image":      "<file> (slide) sets the image to show on the slide",
+	"!id":         "<string> (slide) sets the current id for the slide. By default each slide has no id. Useful for scripting.",
 	"!noautoplay": "(global) disable auto playing. each slide can be toggled by enabling the `active` attribute. only for debugging",
 }
 

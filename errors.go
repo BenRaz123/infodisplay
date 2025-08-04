@@ -24,7 +24,7 @@ const (
 	uknownDirective
 	illegalUseOfDT
 	illegalUseofBold
-	//TODO:fix this, this limitation sucks 
+	//TODO:fix this, this limitation sucks
 	cannotMixBulletsAndLines
 )
 
