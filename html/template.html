@@ -131,7 +131,6 @@ document.addEventListener("DOMContentLoaded", () => {
 {{ $pfoot := .PrimaryFooter }}
 {{ $sfoot := .SecondaryFooter }}
 {{ range .Slides }}
-<script>console.log({{ . }})</script>
 {{ if .IsTitleSlide }}
 	<slide class="title" {{ if .Id.Has }} id="{{.Id.Val}}" {{ end }} {{ if .CustomDuration.Has }} time="{{.CustomDuration.Val}}" {{ end }}>
 		<main>
