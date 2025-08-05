@@ -112,16 +112,16 @@ document.addEventListener("DOMContentLoaded", () => {
     (async () => { 
         while (true) {
 			if (slides.length == 0) return;
+			{{ if .Script.Has }}
+			if (typeof main === 'function') main();
+			else console.error("main function not found")
+			{{ end }}
             for (const slide of slides) {
 				const time = slide.getAttribute('time') ?? {{ .CustomDuration.Or 10.0}};
                 slide.setAttribute("active", "");
 				await sleep(time * 1000);
                 slide.removeAttribute("active")
             }
-			{{ if .Script.Has }}
-			if (typeof main === 'function') main();
-			else console.error("main function not found")
-			{{ end }}
         }
     })();
 });
