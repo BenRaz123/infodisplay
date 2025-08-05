@@ -105,7 +105,7 @@ or
 ## Feature Checklist
 
 - [x] Get stable working version
-- [ ] Add support for comments
+- [x] Add support for comments
 - [ ] Add support for slides with both bullet points and normal lines
 - [ ] Add richer formatting
     - [ ] Italic

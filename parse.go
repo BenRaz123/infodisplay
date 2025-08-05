@@ -43,6 +43,9 @@ func slidesFromString(s string) (b slideshow, e error) {
 
 func (ss *slideshow) parseGlobalBlock(block lines) (e error) {
 	for _, line := range block {
+		if strings.HasPrefix(line.string, "#") {
+			continue
+		}
 		if !strings.HasPrefix(line.string, directivePrefix) {
 			return parseError{l: line.index, t: line.string, r: onlyDirectives}
 		}
@@ -126,6 +129,9 @@ func parseSlide(block lines) (s slide, e error) {
 	hasBullets := false
 	hasText := false
 	for _, line := range block {
+		if strings.HasPrefix(line.string, "#") {
+			continue
+		}
 		if strings.HasPrefix(line.string, directivePrefix) {
 			dir, args := parseDirective(line.string)
 			switch dir {
