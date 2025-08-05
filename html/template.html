@@ -2,7 +2,6 @@
 <html>
 <body>
 {{ getScript }}
-{{ getStyles }}
 <script>
 const regex = /(?<!%)%(([a-z])|([A-Z]))/g;
 function strftime(time, fmt) {
@@ -271,4 +270,5 @@ slide.title h1, slide.title img {
 }
 
 </style>
+{{ getStyles }}
 </html>
