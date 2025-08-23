@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			else console.error("main function not found")
 			{{ end }}
             for (const slide of slides) {
-				const time = slide.getAttribute('time') ?? {{ .CustomDuration.Or 10.0}};
+				const time = slide.getAttribute('data-time') ?? {{ .CustomDuration.Or 10.0}};
                 slide.setAttribute("active", "");
 				await sleep(time * 1000);
                 slide.removeAttribute("active")
@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
 {{ $sfoot := .SecondaryFooter }}
 {{ range .Slides }}
 {{ if .IsTitleSlide }}
-	<slide class="title" {{ if .Id.Has }} id="{{.Id.Val}}" {{ end }} {{ if .CustomDuration.Has }} time="{{.CustomDuration.Val}}" {{ end }}>
+	<slide class="title" {{ if .Id.Has }} id="{{.Id.Val}}" {{ end }} {{ if .CustomDuration.Has }} data-time="{{.CustomDuration.Val}}" {{ end }}>
 		<main>
 			{{ if .Image.Has }}
 			<img src={{.Image.Val}}>
