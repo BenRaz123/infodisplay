@@ -38,13 +38,22 @@ func rightPad(s string, leng int, ch string) string {
 }
 
 func main() {
+	log.SetFlags(log.LstdFlags | log.Lmsgprefix)
+	log.SetPrefix("infodisplay: ")
+
 	kong.Parse(&CLI)
 
 	if CLI.Reference != "" {
-		if val, ok := help[CLI.Reference]; ok {
-			fmt.Printf("%s: %s\n", CLI.Reference, val)
+		ref := CLI.Reference
+		if !strings.HasPrefix(ref, "!") {
+			ref = "!" + ref
 		}
-		os.Exit(0)
+		if val, ok := help[ref]; ok {
+			fmt.Printf("%s: %s\n", ref, val)
+			os.Exit(0)
+		} else {
+			log.Fatalf("no reference for directive %q (for a list of directives see infodisplay -r or infodisplay -h)", ref)
+		}
 	}
 
 	if CLI.ReferenceAll {
@@ -61,8 +70,6 @@ func main() {
 
 	b, err := os.ReadFile(CLI.In)
 
-	log.SetFlags(log.LstdFlags | log.Lmsgprefix)
-	log.SetPrefix("infodisplay: ")
 	if err != nil {
 		log.Fatalf("couldn't read slides file %q: %s", CLI.In, err)
 	}
