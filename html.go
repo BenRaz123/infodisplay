@@ -23,10 +23,12 @@ var (
 	escapedHTML = regexp.MustCompile(`\\<([^<>]*)>`)
 	dt          = regexp.MustCompile(`<<(.*?)>>`)
 	bold        = regexp.MustCompile(`\*(.*?)\*`)
+	code        = regexp.MustCompile("`(.*?)`")
 )
 
 // TODO:implement html escaping
 func process(s string) template.HTML {
+	s = code.ReplaceAllString(s, `<code>$1</code>`)
 	s = escapedHTML.ReplaceAllString(s, `&lt;$1&gt;`)
 	s = bold.ReplaceAllString(s, `<b>$1</b>`)
 	s = dt.ReplaceAllStringFunc(s, func(repl string) string {
