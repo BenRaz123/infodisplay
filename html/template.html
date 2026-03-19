@@ -124,6 +124,42 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     })();
 });
+{{ else }}
+document.addEventListener("DOMContentLoaded", () => {
+    const slides = document.querySelectorAll("slide");
+	let index = 0;
+	let oldIndex = 0;
+	slides[index].setAttribute("active", "");
+	document.addEventListener("keydown", (e) => {
+		if (e.code == "ArrowLeft" 
+			|| e.code == "ArrowUp"
+			|| e.code == "KeyH" 
+			|| e.code == "KeyK") {
+			oldIndex = index;
+			if (index == 0) {
+				index = slides.length-1;
+			} else {
+				index--;
+			}
+
+		} else if (e.code == "ArrowRight" 
+			|| e.code == "ArrowDown"
+			|| e.code == "KeyL" 
+			|| e.code == "KeyJ") {
+			oldIndex = index;
+			if (index == slides.length-1) {
+				index = 0;
+			} else {
+				index++;
+			}
+		} else {
+			return;
+		}
+
+		slides[oldIndex].removeAttribute("active");
+		slides[index].setAttribute("active", "")
+	});
+});
 {{ end }}
 
 </script>
